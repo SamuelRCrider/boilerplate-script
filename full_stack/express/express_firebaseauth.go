@@ -1,4 +1,4 @@
-package express_boil
+package express_scripts
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Express_NoAuth(docker_port string) {
+func Express_FirebaseAuth(docker_port string) {
 	// mkdir for backend, 0755 is the permission bits
 	utils.Mkdir_chdir("backend")
 
@@ -23,7 +23,7 @@ func Express_NoAuth(docker_port string) {
 	utils.Create_File("index.ts", generated.File__index)
 
 	// install cors, dotenv, express, nodemon, ts-node
-	cmd_deps := utils.BoundCommand("npm", "install", "express", "cors", "dotenv", "nodemon", "ts-node")
+	cmd_deps := utils.BoundCommand("npm", "install", "express", "cors", "dotenv", "nodemon", "ts-node", "firebase-admin")
 
 	if err := cmd_deps.Run(); err != nil {
 		fmt.Println(err)
@@ -39,7 +39,10 @@ func Express_NoAuth(docker_port string) {
 	}
 
 	// make app.ts
-	utils.Create_File("app.ts", generated.File__noAuthApp)
+	utils.Create_File("app.ts", generated.File__firebaseAuthApp)
+
+	// make firebase service account key file
+	utils.Create_File("serviceAccountKey.json", generated.File__serviceAccountKey)
 
 	utils.Work_wrapper(func() {
 		// make dockerfile
@@ -70,6 +73,15 @@ func Express_NoAuth(docker_port string) {
 
 		utils.Revise_File(".env", generated.File__firebaseEnv, docker_port)
 
+		// replace the gitignore file
+		err = os.Remove(".gitignore")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		utils.Create_File(".gitignore", generated.File__firebaseGitignore)
+
 		// cd into prisma
 		err = os.Chdir("prisma")
 		if err != nil {
@@ -84,7 +96,7 @@ func Express_NoAuth(docker_port string) {
 			return
 		}
 
-		utils.Create_File("schema.prisma", generated.File__noAuthPrismaSchema)
+		utils.Create_File("schema.prisma", generated.File__firebasePrismaSchema)
 
 		// cd out of prisma
 		err = os.Chdir("..")
@@ -92,6 +104,7 @@ func Express_NoAuth(docker_port string) {
 			fmt.Println(err)
 			return
 		}
+
 	}, "Setting up Prisma...")()
 
 	// run a db migration
@@ -105,11 +118,14 @@ func Express_NoAuth(docker_port string) {
 		// make utils folder, cd into it
 		utils.Mkdir_chdir("utils")
 
-		// create client.ts file
+		// create client.ts
 		utils.Create_File("client.ts", generated.File__client)
 
-		// create global.d.ts file
-		utils.Create_File("global.d.ts", generated.File__expressNoAuthGlobal)
+		// create requireAuth.ts
+		utils.Create_File("requireAuth.ts", generated.File__firebaseRequireAuth)
+
+		// create global.d.ts
+		utils.Create_File("global.d.ts", generated.File__expressFirebaseGlobal)
 
 		// cd out of utils
 		err := os.Chdir("..")
@@ -121,15 +137,28 @@ func Express_NoAuth(docker_port string) {
 		// mkdir lib
 		utils.Mkdir_chdir("lib")
 
+		// mkdir firebase
+		utils.Mkdir_chdir("firebase")
+
+		// create firebase config file
+		utils.Create_File("config.ts", generated.File__firebaseConfig)
+
+		// cd out of firebase
+		err = os.Chdir("..")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		// mkdir controllers
 		utils.Mkdir_chdir("controllers")
 
-		// mkdir users
-		utils.Mkdir_chdir("users")
+		// mkdir auth
+		utils.Mkdir_chdir("auth")
 
-		// create service file and types file
-		utils.Create_File("controller.ts", generated.File__noAuthController)
+		// create controller and types files
+		utils.Create_File("controller.ts", generated.File__firebaseAuthController)
 		utils.Create_File("types.ts", generated.File__firebaseFrontTypes)
 
-	}, "Creating Utils and Library files...")()
+	}, "Creating Library files...")()
 }

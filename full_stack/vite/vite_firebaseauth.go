@@ -1,4 +1,4 @@
-package vite_boil
+package vite_scripts
 
 import (
 	"fmt"
@@ -9,8 +9,9 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Vite_NoAuth() {
+func Vite_FirebaseAuth() {
 
+	// create vite app
 	cmd := utils.BoundCommand("npx", "create-vite@latest", "frontend")
 
 	if err := cmd.Run(); err != nil {
@@ -34,7 +35,7 @@ func Vite_NoAuth() {
 	}
 
 	// import deps
-	cmd = utils.BoundCommand("npm", "install", "axios")
+	cmd = utils.BoundCommand("npm", "install", "axios", "firebase")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -42,7 +43,7 @@ func Vite_NoAuth() {
 	}
 
 	// create .env file
-	utils.Create_File(".env", generated.File__noAuthFrontEnv)
+	utils.Create_File(".env", generated.File__firebaseFrontEnv)
 
 	// replace the gitignore file
 	err = os.Remove(".gitignore")
@@ -72,7 +73,6 @@ func Vite_NoAuth() {
 	)
 
 	if tailwind_check == "Yes" {
-
 		// ask if user would like to add daisyUI, Shadcn UI, or just Tailwind
 		ui_check := utils.Select(
 			"Which UI framework would you like to use?",
@@ -267,7 +267,7 @@ func Vite_NoAuth() {
 	// mkdir pages
 	utils.Mkdir_chdir("pages")
 
-	// make example component
+	// create example component
 	utils.Create_File("Example.tsx", generated.File__exampleComponent)
 
 	// cd out of pages
@@ -280,7 +280,7 @@ func Vite_NoAuth() {
 	// mkdir compound
 	utils.Mkdir_chdir("compound")
 
-	// make example component
+	// create example component
 	utils.Create_File("Example.tsx", generated.File__exampleComponent)
 
 	// cd out of compound
@@ -293,7 +293,7 @@ func Vite_NoAuth() {
 	// mkdir base
 	utils.Mkdir_chdir("base")
 
-	// make example component
+	// create example component
 	utils.Create_File("Example.tsx", generated.File__exampleComponent)
 
 	// cd out of components
@@ -311,21 +311,32 @@ func Vite_NoAuth() {
 		utils.Create_File("utils.ts", generated.File__viteShadcnUtils)
 	}
 
+	// mkdir firebase
+	utils.Mkdir_chdir("firebase")
+
+	// created firebase config
+	utils.Create_File("config.ts", generated.File__firebaseFrontConfig)
+
+	// cd out of firebase
+	err = os.Chdir("..")
+	if err != nil {
+		fmt.Println(err)
+	}
+
 	// mkdir services
 	utils.Mkdir_chdir("services")
 
-	// mkdir users
-	utils.Mkdir_chdir("users")
+	// mkdir auth
+	utils.Mkdir_chdir("auth")
 
 	// create service file and types file
-	utils.Create_File("service.ts", generated.File__noAuthService)
+	utils.Create_File("service.ts", generated.File__firebaseFrontService)
 	utils.Create_File("types.ts", generated.File__firebaseFrontTypes)
 
 	// cd back to project root in preparation for creating the backend
-	err = os.Chdir("../../../../../")
+	err = os.Chdir("../../../../")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
 }

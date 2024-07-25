@@ -1,4 +1,4 @@
-package next_boil
+package next_scripts
 
 import (
 	"fmt"

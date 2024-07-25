@@ -1,4 +1,4 @@
-package vite_boil
+package frontend_only_scripts
 
 import (
 	"fmt"
@@ -11,9 +11,9 @@ import (
 // choice is a global variable that is used to store the user's choice of Shadcn UI config
 var choice string
 
-func Vite_ClerkAuth() {
+func Vite_FrontendClerk(project_name string) {
 
-	cmd := utils.BoundCommand("npx", "create-vite@latest", "frontend", "--", "--template", "react-ts")
+	cmd := utils.BoundCommand("npx", "create-vite@latest", project_name, "--", "--template", "react-ts")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -21,7 +21,7 @@ func Vite_ClerkAuth() {
 	}
 
 	// cd into frontend
-	err := os.Chdir("frontend")
+	err := os.Chdir(project_name)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -36,15 +36,12 @@ func Vite_ClerkAuth() {
 	}
 
 	// import deps
-	cmd = utils.BoundCommand("npm", "install", "axios", "@clerk/clerk-js", "@clerk/clerk-react")
+	cmd = utils.BoundCommand("npm", "install", "@clerk/clerk-js", "@clerk/clerk-react")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	// create .env file
-	utils.Create_File(".env", generated.File__noAuthFrontEnv)
 
 	// create .env.local file
 	utils.Create_File(".env.local", generated.File__viteClerkEnvLocal)
@@ -58,14 +55,14 @@ func Vite_ClerkAuth() {
 
 	utils.Create_File(".gitignore", generated.File__firebaseFrontGitignore)
 
-	// replace the vite.config file
-	err = os.Remove("vite.config.ts")
+	// replace the readme file
+	err = os.Remove("README.md")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	utils.Create_File("vite.config.ts", generated.File__firebaseFrontViteConfig)
+	utils.Create_File("README.md", generated.File__viteClerkFrontendReadme)
 
 	// cd into src
 	err = os.Chdir("src")
@@ -340,28 +337,12 @@ func Vite_ClerkAuth() {
 		return
 	}
 
-	// mkdir lib
-	utils.Mkdir_chdir("lib")
-
 	if choice == "Ok! - Currently, this is your only choice" {
+		// mkdir lib
+		utils.Mkdir_chdir("lib")
+
 		// make utils file
 		utils.Create_File("utils.ts", generated.File__viteShadcnUtils)
 	}
 
-	// mkdir services
-	utils.Mkdir_chdir("services")
-
-	// mkdir users
-	utils.Mkdir_chdir("users")
-
-	// create service file and types file
-	utils.Create_File("service.ts", generated.File__viteClerkService)
-	utils.Create_File("types.ts", generated.File__firebaseAuthTypes)
-
-	// cd back to project root in preparation for creating the backend
-	err = os.Chdir("../../../../../")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
 }

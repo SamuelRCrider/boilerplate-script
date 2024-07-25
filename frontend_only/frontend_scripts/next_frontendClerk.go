@@ -1,4 +1,4 @@
-package next_boil
+package frontend_only_scripts
 
 import (
 	"fmt"
@@ -8,7 +8,10 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Next_FrontendNoAuth(project_name string) {
+// ui_check is a global variable that is used to store the user's choice of UI framework
+var ui_check string
+
+func Next_FrontendClerk(project_name string) {
 
 	// create next app
 	cmd := utils.BoundCommand("npx", "create-next-app", project_name, "--typescript")
@@ -91,14 +94,25 @@ func Next_FrontendNoAuth(project_name string) {
 		}
 	}
 
-	// remove readme and replace with no auth readme
+	// remove readme and replace with clerk readme
 	err = os.Remove("README.md")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	utils.Create_File("README.md", generated.File__nextNoAuthFrontReadMe)
+	utils.Create_File("README.md", generated.File__nextClerkFrontReadMe)
+
+	// install deps
+	cmd_deps := utils.BoundCommand("npm", "install", "@clerk/nextjs")
+
+	if err := cmd_deps.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// make .env.local file
+	utils.Create_File(".env.local", generated.File__nextClerkEnvLocal)
 
 	// replace the gitignore file
 	err = os.Remove(".gitignore")
@@ -112,6 +126,32 @@ func Next_FrontendNoAuth(project_name string) {
 	utils.Work_wrapper(func() {
 		// cd src directory
 		err = os.Chdir("src")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		// create clerk middleware file
+		utils.Create_File("middleware.ts", generated.File__nextClerkMiddleware)
+
+		// cd app directory
+		err = os.Chdir("app")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		// remove and replace the layout file
+		err = os.Remove("layout.tsx")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		utils.Create_File("layout.tsx", generated.File__nextClerkLayout)
+
+		// cd out of app
+		err = os.Chdir("..")
 		if err != nil {
 			fmt.Println(err)
 			return

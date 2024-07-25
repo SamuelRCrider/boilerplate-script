@@ -1,16 +1,17 @@
-package vite_boil
+package vite_scripts
 
 import (
 	"fmt"
 	"os"
 
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
+
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Vite_FrontendNoAuth(project_name string) {
+func Vite_NoAuth() {
 
-	cmd := utils.BoundCommand("npx", "create-vite@latest", project_name)
+	cmd := utils.BoundCommand("npx", "create-vite@latest", "frontend")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -18,7 +19,7 @@ func Vite_FrontendNoAuth(project_name string) {
 	}
 
 	// cd into frontend
-	err := os.Chdir(project_name)
+	err := os.Chdir("frontend")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -26,6 +27,14 @@ func Vite_FrontendNoAuth(project_name string) {
 
 	// npm install all the vite packages
 	cmd = utils.BoundCommand("npm", "install")
+
+	if err := cmd.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// import deps
+	cmd = utils.BoundCommand("npm", "install", "axios")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -44,14 +53,14 @@ func Vite_FrontendNoAuth(project_name string) {
 
 	utils.Create_File(".gitignore", generated.File__firebaseFrontGitignore)
 
-	// replace the readme file
-	err = os.Remove("README.md")
+	// replace the vite.config file
+	err = os.Remove("vite.config.ts")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	utils.Create_File("README.md", generated.File__viteFrontendNoAuthReadme)
+	utils.Create_File("vite.config.ts", generated.File__firebaseFrontViteConfig)
 
 	// ask if user wants tailwind
 	tailwind_check := utils.Select(
@@ -294,12 +303,29 @@ func Vite_FrontendNoAuth(project_name string) {
 		return
 	}
 
-	if choice == "Ok! - Currently, this is your only choice" {
-		// mkdir lib
-		utils.Mkdir_chdir("lib")
+	// mkdir lib
+	utils.Mkdir_chdir("lib")
 
+	if choice == "Ok! - Currently, this is your only choice" {
 		// make utils file
 		utils.Create_File("utils.ts", generated.File__viteShadcnUtils)
+	}
+
+	// mkdir services
+	utils.Mkdir_chdir("services")
+
+	// mkdir users
+	utils.Mkdir_chdir("users")
+
+	// create service file and types file
+	utils.Create_File("service.ts", generated.File__noAuthService)
+	utils.Create_File("types.ts", generated.File__firebaseFrontTypes)
+
+	// cd back to project root in preparation for creating the backend
+	err = os.Chdir("../../../../../")
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 }

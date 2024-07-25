@@ -3,8 +3,7 @@ package frontend_only_boil
 import (
 	"fmt"
 
-	next_boil "sam.crider/boilerplate-script/next"
-	vite_boil "sam.crider/boilerplate-script/vite"
+	frontend_only_scripts "sam.crider/boilerplate-script/frontend_only/frontend_scripts"
 
 	"sam.crider/boilerplate-script/utils"
 )
@@ -27,11 +26,10 @@ func FrontendOnly(stack string, project_name string) {
 		switch auth_integration {
 		case "Clerk":
 			// create the frontend
-			vite_boil.Vite_FrontendClerk(project_name)
-
+			frontend_only_scripts.Vite_FrontendClerk(project_name)
 		case "None":
 			// create the frontend
-			vite_boil.Vite_FrontendNoAuth(project_name)
+			frontend_only_scripts.Vite_FrontendNoAuth(project_name)
 		default:
 			fmt.Println("Failure. Maybe you didn't select an option?")
 			return
@@ -45,10 +43,10 @@ func FrontendOnly(stack string, project_name string) {
 		switch auth_integration {
 		case "Clerk":
 			// create the frontend
-			next_boil.Next_FrontendClerk(project_name)
+			frontend_only_scripts.Next_FrontendClerk(project_name)
 		case "None":
 			// create the frontend
-			next_boil.Next_FrontendNoAuth(project_name)
+			frontend_only_scripts.Next_FrontendNoAuth(project_name)
 		default:
 			fmt.Println("Failure. Maybe you didn't select an option?")
 			return
