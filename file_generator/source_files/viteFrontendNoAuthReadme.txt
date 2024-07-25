@@ -1,7 +1,7 @@
-// Vite + Express App with No Auth
+// Vite Frontend App with No Auth
 
 ## General
-- Note that docker is running, it just isn't shown in the terminal
+- If you selected yes to the database question: docker is running, it just isn't shown in the terminal
 - If a file is in the gitignore but isn't greyed out, try the following:
     1. delete and then retype a letter of the filename in the gitignore, save the gitignore file.
     2. No luck? Reload the developer window.

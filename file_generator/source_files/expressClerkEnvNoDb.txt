@@ -1,0 +1,1 @@
+CLERK_SECRET_KEY=your_clerk_secret_key_here

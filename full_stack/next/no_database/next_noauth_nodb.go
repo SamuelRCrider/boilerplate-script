@@ -1,45 +1,15 @@
-package next_scripts
+package no_database
 
 import (
 	"fmt"
 	"os"
 
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
-	"sam.crider/boilerplate-script/full_stack/next/no_database"
 
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Next_NoAuth(project_name string, docker_port string) {
-	// create next app
-	cmd := utils.BoundCommand("npx", "create-next-app", project_name, "--typescript")
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// cd into project
-	err := os.Chdir(project_name)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// check if user needs a database
-	db_check := utils.Select(
-		"Do you need a database?",
-		[]string{
-			"Yes - PostgreSQL",
-			"No",
-		},
-	)
-
-	if db_check == "No" {
-		// build backend without a database
-		no_database.Next_NoAuth_NoDB()
-		return
-	}
+func Next_NoAuth_NoDB() {
 
 	// check if there is a tailwind.config.js file
 	if _, err := os.Stat("tailwind.config.ts"); err == nil {
@@ -108,7 +78,7 @@ func Next_NoAuth(project_name string, docker_port string) {
 	}
 
 	// remove readme and replace with no auth readme
-	err = os.Remove("README.md")
+	err := os.Remove("README.md")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -116,98 +86,18 @@ func Next_NoAuth(project_name string, docker_port string) {
 
 	utils.Create_File("README.md", generated.File__nextNoAuthReadme)
 
-	// install dev deps (prisma)
-	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "prisma")
-
-	if err := cmd_dev_deps.Run(); err != nil {
+	// replace the gitignore file
+	err = os.Remove(".gitignore")
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	utils.Work_wrapper(func() {
-		// make dockerfile
-		utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
-
-		// get docker up
-		cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
-		if err := cmd_docker.Run(); err != nil {
-			fmt.Println(err)
-			return
-		}
-	}, "Starting Docker container...")()
-
-	utils.Work_wrapper(func() {
-		// initialize prisma
-		cmd_prisma := utils.BoundCommand("npx", "prisma", "init", "--datasource-provider", "postgreSQL")
-		if err := cmd_prisma.Run(); err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// replace the .env file
-		err = os.Remove(".env")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		utils.Revise_File(".env", generated.File__firebaseEnv, docker_port)
-
-		// replace the gitignore file
-		err = os.Remove(".gitignore")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		utils.Create_File(".gitignore", generated.File__nextGitignore)
-
-		// cd into prisma
-		err = os.Chdir("prisma")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// remove the schema and create a new one
-		err = os.Remove("schema.prisma")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		utils.Create_File("schema.prisma", generated.File__noAuthPrismaSchema)
-
-		// cd out of prisma
-		err = os.Chdir("..")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-	}, "Setting up Prisma...")()
-
-	// run a db migration
-	cmd_migration := utils.BoundCommand("npx", "prisma", "migrate", "dev")
-	if err := cmd_migration.Run(); err != nil {
-		fmt.Println(err)
-		return
-	}
+	utils.Create_File(".gitignore", generated.File__nextGitignore)
 
 	utils.Work_wrapper(func() {
 		// cd src directory
 		err = os.Chdir("src")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// make utils folder, cd into it
-		utils.Mkdir_chdir("utils")
-
-		// create client.ts file
-		utils.Create_File("client.ts", generated.File__client)
-
-		// cd out of utils
-		err = os.Chdir("..")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -283,5 +173,4 @@ func Next_NoAuth(project_name string, docker_port string) {
 		utils.Create_File("types.ts", generated.File__firebaseFrontTypes)
 
 	}, "Creating Utils, Components, and Library folders...")()
-
 }
