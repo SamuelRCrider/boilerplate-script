@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"sam.crider/boilerplate-script/full_stack/next/no_database"
+
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
 
 	"sam.crider/boilerplate-script/utils"
@@ -22,6 +24,21 @@ func Next_Firebase(project_name string, docker_port string) {
 	err := os.Chdir(project_name)
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+
+	// check if user needs a database
+	db_check := utils.Select(
+		"Do you need a database?",
+		[]string{
+			"Yes - PostgreSQL",
+			"No",
+		},
+	)
+
+	if db_check == "No" {
+		// build backend without a database
+		no_database.Next_Firebase_NoDB()
 		return
 	}
 
