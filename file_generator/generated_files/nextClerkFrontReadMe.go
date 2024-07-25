@@ -2,11 +2,10 @@
 
 package generated
 
-var File__nextNoAuthReadme = []string{
-"// Next.js App with No Auth",
+var File__nextClerkFrontReadMe = []string{
+"// Next.js Frontend App with clerk integration",
 "",
 "## General",
-"- Note that docker is running, it just isn't shown in the terminal",
 "- If a file is in the gitignore but isn't greyed out, try the following:",
 "    1. delete and then retype a letter of the filename in the gitignore, save the gitignore file.",
 "    2. No luck? Reload the developer window.",
@@ -15,10 +14,13 @@ var File__nextNoAuthReadme = []string{
 "- Note that a git repo has been initialized in the root directory of your project!",
 "- IF USING SHADCN: to add a new component run `npx shadcn-ui@latest add <component_name>`",
 "",
+"## Clerk",
+"- You need to go to the clerk website and create a new project.",
+"- Then add the project's publishable key and secret key to the .env.local file.",
+"",
 "## Resources",
-"- Docker: https://docs.docker.com/guides/",
+"- Clerk: https://clerk.com/docs/",
 "- Next.js: https://nextjs.org/docs",
-"- Prisma: https://www.prisma.io/docs",
 "- Tailwind: https://tailwindcss.com/docs",
 "- DaisyUI: https://daisyui.com/docs",
 "- Shadcn UI: https://ui.shadcn.com/docs",

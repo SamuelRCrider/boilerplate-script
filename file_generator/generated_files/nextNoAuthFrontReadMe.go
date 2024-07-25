@@ -2,11 +2,10 @@
 
 package generated
 
-var File__nextNoAuthReadme = []string{
-"// Next.js App with No Auth",
+var File__nextNoAuthFrontReadMe = []string{
+"// Next.js Frontend App with No Auth",
 "",
 "## General",
-"- Note that docker is running, it just isn't shown in the terminal",
 "- If a file is in the gitignore but isn't greyed out, try the following:",
 "    1. delete and then retype a letter of the filename in the gitignore, save the gitignore file.",
 "    2. No luck? Reload the developer window.",
@@ -16,9 +15,7 @@ var File__nextNoAuthReadme = []string{
 "- IF USING SHADCN: to add a new component run `npx shadcn-ui@latest add <component_name>`",
 "",
 "## Resources",
-"- Docker: https://docs.docker.com/guides/",
 "- Next.js: https://nextjs.org/docs",
-"- Prisma: https://www.prisma.io/docs",
 "- Tailwind: https://tailwindcss.com/docs",
 "- DaisyUI: https://daisyui.com/docs",
 "- Shadcn UI: https://ui.shadcn.com/docs",

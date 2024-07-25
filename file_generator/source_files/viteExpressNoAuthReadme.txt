@@ -12,6 +12,7 @@
 ## Frontend
 #### Notes
 - If you want to use process.env.[secret], you will need to define it in the vite.config.ts file under where I've defined the API_URL.
+- IF USING SHADCN: to add a new component run `npx shadcn-ui@latest add <component_name>`
 
 #### To run frontend:
 1. In terminal: npm run dev
@@ -34,4 +35,7 @@
 - Docker: https://docs.docker.com/guides/
 - Vite: https://vitejs.dev/guide/
 - Prisma: https://www.prisma.io/docs
+- Tailwind: https://tailwindcss.com/docs
+- DaisyUI: https://daisyui.com/docs
+- Shadcn UI: https://ui.shadcn.com/docs
 

@@ -5,8 +5,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
+
+	frontend_only_boil "sam.crider/boilerplate-script/frontend_only"
 
 	next_boil "sam.crider/boilerplate-script/next"
 
@@ -17,17 +20,14 @@ import (
 
 // stacks is a list of all the stacks that the user can select
 var stacks = []string{
+	"Vite (Frontend Only)",
+	"Next.js (Frontend Only)",
 	"Vite + Express",
-	"Next.js",
-	"Add Your Own: (https://github.com/SamuelRCrider/chiks/CONTRIBUTING.md)",
+	"Next.js Full Stack",
+	"Add Your Own: (https://github.com/SamuelRCrider/chiks/blob/main/CONTRIBUTING.md)",
 }
 
 func main() {
-	next_boil.Next_Firebase("chiks", utils.GetDockerPort())
-	// next_boil.Next_NoAuth("chiks3", utils.GetDockerPort())
-}
-
-func _main() {
 
 	// parse args
 	args := os.Args[1:]
@@ -50,10 +50,23 @@ func _main() {
 		stacks,
 	)
 
+	if strings.Contains(stack, "Add Your Own") {
+		// link to the contributing guide
+		utils.Open("https://github.com/SamuelRCrider/chiks/blob/main/CONTRIBUTING.md")
+		return
+
+	}
+
 	// get the user's project name
 	project_name := utils.Input(
 		"What's the name of this project?",
 	)
+
+	// if the stack is frontend only, run the FrontendOnly function
+	if strings.Contains(stack, "Frontend") {
+		frontend_only_boil.FrontendOnly(stack, project_name)
+		return
+	}
 
 	// get users auth preference
 	auth_integration := utils.Select(
@@ -68,8 +81,9 @@ func _main() {
 	// get the docker port
 	docker_port := utils.GetDockerPort()
 
-	// TODO: make this a switch case
-	if stack == "Vite + Express" {
+	// switch case for stack
+	switch stack {
+	case "Vite + Express":
 		utils.Work_wrapper(func() {
 			// create a directory for the project, 0755 is the permission bits
 			err := os.Mkdir(project_name, 0755)
@@ -136,9 +150,7 @@ func _main() {
 
 		fmt.Println("Failure. Maybe you didn't select an option?")
 		return
-
-	}
-	if stack == "Next.js" {
+	case "Next.js Full Stack":
 		// TODO: make this a switch case
 		if auth_integration == "Firebase" {
 			// create the app
@@ -164,8 +176,9 @@ func _main() {
 
 		fmt.Println("Failure. Maybe you didn't select an option?")
 		return
-
+	default:
+		fmt.Println("Failure. Maybe you didn't select an option? Or maybe you clicked Add Your Own. In that case, check out: https://github.com/SamuelRCrider/chiks/blob/main/CONTRIBUTING.md")
+		return
 	}
 
-	fmt.Println("Failure. Maybe you didn't select an option?")
 }

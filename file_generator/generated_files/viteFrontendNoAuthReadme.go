@@ -2,8 +2,8 @@
 
 package generated
 
-var File__nextNoAuthReadme = []string{
-"// Next.js App with No Auth",
+var File__viteFrontendNoAuthReadme = []string{
+"// Vite + Express App with No Auth",
 "",
 "## General",
 "- Note that docker is running, it just isn't shown in the terminal",
@@ -13,13 +13,19 @@ var File__nextNoAuthReadme = []string{
 "    3. No luck? The .env is probably in the staging area of git. Unstage it.",
 "    4. Still no luck? Look it up or ask for help. (sorry lol)",
 "- Note that a git repo has been initialized in the root directory of your project!",
+"",
+"## Frontend",
+"#### Notes",
 "- IF USING SHADCN: to add a new component run `npx shadcn-ui@latest add <component_name>`",
 "",
+"#### To run frontend:",
+"1. In terminal: npm run dev",
+"",
+"",
 "## Resources",
-"- Docker: https://docs.docker.com/guides/",
-"- Next.js: https://nextjs.org/docs",
-"- Prisma: https://www.prisma.io/docs",
+"- Vite: https://vitejs.dev/guide/",
 "- Tailwind: https://tailwindcss.com/docs",
 "- DaisyUI: https://daisyui.com/docs",
 "- Shadcn UI: https://ui.shadcn.com/docs",
+"",
 }

@@ -15,6 +15,7 @@ var File__nextFirebaseReadme = []string{
 "    4. Still no luck? Look it up or ask for help. (sorry lol)",
 "",
 "- Note that a git repo has been initialized in the root directory of your project!",
+"- IF USING SHADCN: to add a new component run `npx shadcn-ui@latest add <component_name>`",
 "",
 "#### Firebase",
 "- You need to get your firebase config object from the Firebase console (your project on the firebase website) and add it to the .env file.",
@@ -26,5 +27,8 @@ var File__nextFirebaseReadme = []string{
 "- Next.js: https://nextjs.org/docs",
 "- Docker: https://docs.docker.com/guides/",
 "- Prisma: https://www.prisma.io/docs",
+"- Tailwind: https://tailwindcss.com/docs",
+"- DaisyUI: https://daisyui.com/docs",
+"- Shadcn UI: https://ui.shadcn.com/docs",
 "",
 }
