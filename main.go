@@ -24,8 +24,7 @@ var stacks = []string{
 }
 
 func main() {
-	next_scripts.Next_NoAuth("test-next", "10009")
-	// next_scripts.Next_Firebase("test-next", "10009")
+	next_scripts.Next_Firebase("test-next", "10009")
 }
 
 func _main() {

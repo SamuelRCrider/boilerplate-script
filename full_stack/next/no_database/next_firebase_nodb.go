@@ -94,12 +94,6 @@ func Next_Firebase_NoDB() {
 		return
 	}
 
-	// replace the .env file
-	err = os.Remove(".env")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
 	utils.Create_File(".env", generated.File__nextFirebaseEnvNoDb)
 
 	// replace the gitignore file
