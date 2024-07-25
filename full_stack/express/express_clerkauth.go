@@ -31,7 +31,7 @@ func Express_ClerkAuth(docker_port string) {
 
 	if db_check == "No" {
 		// build backend without a database
-		no_database.Express_Clerk_NoDB(docker_port)
+		no_database.Express_Clerk_NoDB()
 		return
 	}
 

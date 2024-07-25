@@ -31,7 +31,7 @@ func Express_NoAuth(docker_port string) {
 
 	if db_check == "No" {
 		// build backend without a database
-		no_database.Express_NoAuth_NoDB(docker_port)
+		no_database.Express_NoAuth_NoDB()
 		return
 	}
 

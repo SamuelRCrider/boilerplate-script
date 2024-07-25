@@ -9,7 +9,7 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Express_Firebase_NoDB(docker_port string) {
+func Express_Firebase_NoDB() {
 
 	// create index.ts file in new project
 	utils.Create_File("index.ts", generated.File__index)
@@ -23,7 +23,7 @@ func Express_Firebase_NoDB(docker_port string) {
 	}
 
 	// install dev deps: cors types, express types, prisma
-	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "@types/cors", "@types/express", "prisma")
+	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "@types/cors", "@types/express")
 
 	if err := cmd_dev_deps.Run(); err != nil {
 		fmt.Println(err)
@@ -36,82 +36,18 @@ func Express_Firebase_NoDB(docker_port string) {
 	// make firebase service account key file
 	utils.Create_File("serviceAccountKey.json", generated.File__serviceAccountKey)
 
-	utils.Work_wrapper(func() {
-		// make dockerfile
-		utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
-
-		// get docker up
-		cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
-		if err := cmd_docker.Run(); err != nil {
-			fmt.Println(err)
-			return
-		}
-	}, "Starting Docker container...")()
-
-	utils.Work_wrapper(func() {
-		// initialize primsa
-		cmd_prisma := utils.BoundCommand("npx", "prisma", "init", "--datasource-provider", "postgreSQL")
-		if err := cmd_prisma.Run(); err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// replace the .env file
-		err := os.Remove(".env")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		utils.Revise_File(".env", generated.File__firebaseEnv, docker_port)
-
-		// replace the gitignore file
-		err = os.Remove(".gitignore")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		utils.Create_File(".gitignore", generated.File__firebaseGitignore)
-
-		// cd into prisma
-		err = os.Chdir("prisma")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// remove the schema and create a new one
-		err = os.Remove("schema.prisma")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		utils.Create_File("schema.prisma", generated.File__firebasePrismaSchema)
-
-		// cd out of prisma
-		err = os.Chdir("..")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-	}, "Setting up Prisma...")()
-
-	// run a db migration
-	cmd_migration := utils.BoundCommand("npx", "prisma", "migrate", "dev")
-	if err := cmd_migration.Run(); err != nil {
+	// replace the gitignore file
+	err := os.Remove(".gitignore")
+	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
+	utils.Create_File(".gitignore", generated.File__firebaseGitignore)
+
 	utils.Work_wrapper(func() {
 		// make utils folder, cd into it
 		utils.Mkdir_chdir("utils")
-
-		// create client.ts
-		utils.Create_File("client.ts", generated.File__client)
 
 		// create requireAuth.ts
 		utils.Create_File("requireAuth.ts", generated.File__firebaseRequireAuth)
