@@ -22,7 +22,7 @@ func Express_Clerk_NoDB() {
 		return
 	}
 
-	// install dev deps: cors types, express types, prisma
+	// install dev deps: cors types, express types
 	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "@types/cors", "@types/express", "@clerk/types")
 
 	if err := cmd_dev_deps.Run(); err != nil {
@@ -33,13 +33,7 @@ func Express_Clerk_NoDB() {
 	// make app.ts
 	utils.Create_File("app.ts", generated.File__expressClerkApp)
 
-	// replace the .env file
-	err := os.Remove(".env")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
+	// make env file
 	utils.Create_File(".env", generated.File__expressClerkEnvNoDb)
 
 	utils.Work_wrapper(func() {

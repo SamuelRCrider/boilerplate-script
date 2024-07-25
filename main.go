@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 
+	next_scripts "sam.crider/boilerplate-script/full_stack/next"
 	"sam.crider/boilerplate-script/utils"
 
 	frontend_only_boil "sam.crider/boilerplate-script/frontend_only"
@@ -23,6 +24,11 @@ var stacks = []string{
 }
 
 func main() {
+	next_scripts.Next_NoAuth("test-next", "10009")
+	// next_scripts.Next_Firebase("test-next", "10009")
+}
+
+func _main() {
 
 	// parse args
 	args := os.Args[1:]

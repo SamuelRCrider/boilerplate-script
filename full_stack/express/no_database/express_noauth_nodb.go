@@ -22,7 +22,7 @@ func Express_NoAuth_NoDB() {
 		return
 	}
 
-	// install dev deps: cors types, express types, prisma
+	// install dev deps: cors types, express types
 	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "@types/cors", "@types/express")
 
 	if err := cmd_dev_deps.Run(); err != nil {

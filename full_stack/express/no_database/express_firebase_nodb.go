@@ -22,7 +22,7 @@ func Express_Firebase_NoDB() {
 		return
 	}
 
-	// install dev deps: cors types, express types, prisma
+	// install dev deps: cors types, express types
 	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "@types/cors", "@types/express")
 
 	if err := cmd_dev_deps.Run(); err != nil {
@@ -35,13 +35,6 @@ func Express_Firebase_NoDB() {
 
 	// make firebase service account key file
 	utils.Create_File("serviceAccountKey.json", generated.File__serviceAccountKey)
-
-	// replace the gitignore file
-	err := os.Remove(".gitignore")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
 
 	utils.Create_File(".gitignore", generated.File__firebaseGitignore)
 
