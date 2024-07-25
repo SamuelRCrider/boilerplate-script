@@ -1,4 +1,4 @@
-package vite_boil
+package frontend_only_scripts
 
 import (
 	"fmt"
@@ -8,9 +8,9 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Vite_FrontendClerk(project_name string) {
+func Vite_FrontendNoAuth(project_name string) {
 
-	cmd := utils.BoundCommand("npx", "create-vite@latest", project_name, "--", "--template", "react-ts")
+	cmd := utils.BoundCommand("npx", "create-vite@latest", project_name)
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -32,16 +32,8 @@ func Vite_FrontendClerk(project_name string) {
 		return
 	}
 
-	// import deps
-	cmd = utils.BoundCommand("npm", "install", "@clerk/clerk-js", "@clerk/clerk-react")
-
-	if err := cmd.Run(); err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// create .env.local file
-	utils.Create_File(".env.local", generated.File__viteClerkEnvLocal)
+	// create .env file
+	utils.Create_File(".env", generated.File__noAuthFrontEnv)
 
 	// replace the gitignore file
 	err = os.Remove(".gitignore")
@@ -59,34 +51,7 @@ func Vite_FrontendClerk(project_name string) {
 		return
 	}
 
-	utils.Create_File("README.md", generated.File__viteClerkFrontendReadme)
-
-	// cd into src
-	err = os.Chdir("src")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// remove the main.tsx file
-	err = os.Remove("main.tsx")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// replace the main.tsx file
-	utils.Create_File("main.tsx", generated.File__viteClerkMain)
-
-	// remove the app.tsx file
-	err = os.Remove("app.tsx")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	// replace the App.tsx file
-	utils.Create_File("App.tsx", generated.File__viteClerkApp)
+	utils.Create_File("README.md", generated.File__viteFrontendNoAuthReadme)
 
 	// ask if user wants tailwind
 	tailwind_check := utils.Select(
@@ -98,6 +63,7 @@ func Vite_FrontendClerk(project_name string) {
 	)
 
 	if tailwind_check == "Yes" {
+
 		// ask if user would like to add daisyUI, Shadcn UI, or just Tailwind
 		ui_check := utils.Select(
 			"Which UI framework would you like to use?",
@@ -110,14 +76,6 @@ func Vite_FrontendClerk(project_name string) {
 
 		/* install tailwind */
 
-		// cd out of src
-		err = os.Chdir("..")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		// install tailwind
 		cmd := utils.BoundCommand("npm", "install", "-D", "tailwindcss", "postcss", "autoprefixer")
 
 		if err := cmd.Run(); err != nil {
@@ -275,12 +233,14 @@ func Vite_FrontendClerk(project_name string) {
 			utils.Create_File("tailwind.config.js", generated.File__viteDaisyTconfig)
 
 		}
-		// cd into src
-		err = os.Chdir("src")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
+
+	}
+
+	// cd into src
+	err = os.Chdir("src")
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// mkdir components
@@ -298,7 +258,7 @@ func Vite_FrontendClerk(project_name string) {
 	// mkdir pages
 	utils.Mkdir_chdir("pages")
 
-	// create example component
+	// make example component
 	utils.Create_File("Example.tsx", generated.File__exampleComponent)
 
 	// cd out of pages
@@ -311,7 +271,7 @@ func Vite_FrontendClerk(project_name string) {
 	// mkdir compound
 	utils.Mkdir_chdir("compound")
 
-	// create example component
+	// make example component
 	utils.Create_File("Example.tsx", generated.File__exampleComponent)
 
 	// cd out of compound
@@ -324,7 +284,7 @@ func Vite_FrontendClerk(project_name string) {
 	// mkdir base
 	utils.Mkdir_chdir("base")
 
-	// create example component
+	// make example component
 	utils.Create_File("Example.tsx", generated.File__exampleComponent)
 
 	// cd out of components

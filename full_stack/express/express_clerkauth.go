@@ -1,4 +1,4 @@
-package express_boil
+package express_scripts
 
 import (
 	"fmt"

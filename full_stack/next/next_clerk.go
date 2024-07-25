@@ -1,4 +1,4 @@
-package next_boil
+package next_scripts
 
 import (
 	"fmt"
@@ -9,7 +9,10 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Next_NoAuth(project_name string, docker_port string) {
+// ui_check is a global variable that is used to store the user's choice of UI framework
+var ui_check string
+
+func Next_ClerkAuth(project_name string, docker_port string) {
 	// create next app
 	cmd := utils.BoundCommand("npx", "create-next-app", project_name, "--typescript")
 
@@ -91,14 +94,25 @@ func Next_NoAuth(project_name string, docker_port string) {
 		}
 	}
 
-	// remove readme and replace with no auth readme
+	// remove readme and replace with clerk readme
 	err = os.Remove("README.md")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	utils.Create_File("README.md", generated.File__nextNoAuthReadme)
+	utils.Create_File("README.md", generated.File__nextClerkReadme)
+
+	// install deps
+	cmd_deps := utils.BoundCommand("npm", "install", "@clerk/nextjs")
+
+	if err := cmd_deps.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// make .env.local file
+	utils.Create_File(".env.local", generated.File__nextClerkEnvLocal)
 
 	// install dev deps (prisma)
 	cmd_dev_deps := utils.BoundCommand("npm", "install", "--save-dev", "prisma")
@@ -179,6 +193,32 @@ func Next_NoAuth(project_name string, docker_port string) {
 	utils.Work_wrapper(func() {
 		// cd src directory
 		err = os.Chdir("src")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		// create clerk middleware file
+		utils.Create_File("middleware.ts", generated.File__nextClerkMiddleware)
+
+		// cd app directory
+		err = os.Chdir("app")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		// remove and replace the layout file
+		err = os.Remove("layout.tsx")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		utils.Create_File("layout.tsx", generated.File__nextClerkLayout)
+
+		// cd out of app
+		err = os.Chdir("..")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -265,7 +305,6 @@ func Next_NoAuth(project_name string, docker_port string) {
 		// create controller and types files
 		utils.Create_File("controller.ts", generated.File__nextNoAuthController)
 		utils.Create_File("types.ts", generated.File__firebaseFrontTypes)
-
 	}, "Creating Utils, Components, and Library folders...")()
 
 }

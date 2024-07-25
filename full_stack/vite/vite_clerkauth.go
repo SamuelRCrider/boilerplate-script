@@ -1,18 +1,19 @@
-package vite_boil
+package vite_scripts
 
 import (
 	"fmt"
 	"os"
 
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
-
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Vite_FirebaseAuth() {
+// choice is a global variable that is used to store the user's choice of Shadcn UI config
+var choice string
 
-	// create vite app
-	cmd := utils.BoundCommand("npx", "create-vite@latest", "frontend")
+func Vite_ClerkAuth() {
+
+	cmd := utils.BoundCommand("npx", "create-vite@latest", "frontend", "--", "--template", "react-ts")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -35,7 +36,7 @@ func Vite_FirebaseAuth() {
 	}
 
 	// import deps
-	cmd = utils.BoundCommand("npm", "install", "axios", "firebase")
+	cmd = utils.BoundCommand("npm", "install", "axios", "@clerk/clerk-js", "@clerk/clerk-react")
 
 	if err := cmd.Run(); err != nil {
 		fmt.Println(err)
@@ -43,7 +44,10 @@ func Vite_FirebaseAuth() {
 	}
 
 	// create .env file
-	utils.Create_File(".env", generated.File__firebaseFrontEnv)
+	utils.Create_File(".env", generated.File__noAuthFrontEnv)
+
+	// create .env.local file
+	utils.Create_File(".env.local", generated.File__viteClerkEnvLocal)
 
 	// replace the gitignore file
 	err = os.Remove(".gitignore")
@@ -62,6 +66,33 @@ func Vite_FirebaseAuth() {
 	}
 
 	utils.Create_File("vite.config.ts", generated.File__firebaseFrontViteConfig)
+
+	// cd into src
+	err = os.Chdir("src")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// remove the main.tsx file
+	err = os.Remove("main.tsx")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// replace the main.tsx file
+	utils.Create_File("main.tsx", generated.File__viteClerkMain)
+
+	// remove the app.tsx file
+	err = os.Remove("app.tsx")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// replace the App.tsx file
+	utils.Create_File("App.tsx", generated.File__viteClerkApp)
 
 	// ask if user wants tailwind
 	tailwind_check := utils.Select(
@@ -85,6 +116,14 @@ func Vite_FirebaseAuth() {
 
 		/* install tailwind */
 
+		// cd out of src
+		err = os.Chdir("..")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		// install tailwind
 		cmd := utils.BoundCommand("npm", "install", "-D", "tailwindcss", "postcss", "autoprefixer")
 
 		if err := cmd.Run(); err != nil {
@@ -242,14 +281,12 @@ func Vite_FirebaseAuth() {
 			utils.Create_File("tailwind.config.js", generated.File__viteDaisyTconfig)
 
 		}
-
-	}
-
-	// cd into src
-	err = os.Chdir("src")
-	if err != nil {
-		fmt.Println(err)
-		return
+		// cd into src
+		err = os.Chdir("src")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 	}
 
 	// mkdir components
@@ -311,30 +348,18 @@ func Vite_FirebaseAuth() {
 		utils.Create_File("utils.ts", generated.File__viteShadcnUtils)
 	}
 
-	// mkdir firebase
-	utils.Mkdir_chdir("firebase")
-
-	// created firebase config
-	utils.Create_File("config.ts", generated.File__firebaseFrontConfig)
-
-	// cd out of firebase
-	err = os.Chdir("..")
-	if err != nil {
-		fmt.Println(err)
-	}
-
 	// mkdir services
 	utils.Mkdir_chdir("services")
 
-	// mkdir auth
-	utils.Mkdir_chdir("auth")
+	// mkdir users
+	utils.Mkdir_chdir("users")
 
 	// create service file and types file
-	utils.Create_File("service.ts", generated.File__firebaseFrontService)
-	utils.Create_File("types.ts", generated.File__firebaseFrontTypes)
+	utils.Create_File("service.ts", generated.File__viteClerkService)
+	utils.Create_File("types.ts", generated.File__firebaseAuthTypes)
 
 	// cd back to project root in preparation for creating the backend
-	err = os.Chdir("../../../../")
+	err = os.Chdir("../../../../../")
 	if err != nil {
 		fmt.Println(err)
 		return
