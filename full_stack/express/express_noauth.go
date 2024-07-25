@@ -5,6 +5,7 @@ import (
 	"os"
 
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
+	"sam.crider/boilerplate-script/full_stack/express/no_database"
 	"sam.crider/boilerplate-script/utils"
 )
 
@@ -16,6 +17,21 @@ func Express_NoAuth(docker_port string) {
 	cmd_npm := utils.BoundCommand("npm", "init")
 	if err := cmd_npm.Run(); err != nil {
 		fmt.Println(err)
+		return
+	}
+
+	// ask if user needs a database
+	db_check := utils.Select(
+		"Do you need a database?",
+		[]string{
+			"Yes - PostgreSQL",
+			"No",
+		},
+	)
+
+	if db_check == "No" {
+		// build backend without a database
+		no_database.Express_NoAuth_NoDB(docker_port)
 		return
 	}
 
