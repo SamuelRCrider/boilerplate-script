@@ -22,9 +22,16 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 
 1. Fork the repo and create your branch from `main`.
 2. **If you're adding a new stack:**
-   - Run `go run ./scripts/build_stack/build.go` in the terminal.
-   - Follow the prompts.
-   - The script leverages your input and an AI workflow to generate a boilerplate for your stack.
+   - Put things where they belong - full stack scripts go in the `full_stack` folder, and frontend only scripts go in the `frontend_only` folder.
+   - Note that frontend only scripts must include (Frontend Only) in the name of the script.
+   - If you're adding a full stack script:
+     - create two folders, one for the frontend framework and one for the backend framework
+     - include optionality in your scripts (e.g. database y/n, UI framework y/n, auth integration y/n)
+     - make sure to link them into the full_stack.go switch case and add them to the `stacks` array in the main.go file
+   - If you're adding a frontend only script:
+     - create a folder for the frontend framework
+     - include optionality in your script (e.g. UI framework y/n)
+     - make sure to link it into the frontend_only.go switch case and add it to the `stacks` array in the main.go file
 3. If you've added code that should be tested, add tests.
 4. Ensure the test suite passes.
 5. Issue that pull request!
