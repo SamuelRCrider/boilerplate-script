@@ -34,7 +34,12 @@ npm install -g chiks
 
 ### 🛠 Project Creation
 
-Create a Next.js project or a Vite + Express project
+- Full Stack
+  - Next.js
+  - Vite + Express
+- Frontend Only
+  - Next.js
+  - Vite
 
 ### 🐳 Docker Integration
 
@@ -47,6 +52,7 @@ Sets up a Prisma database and runs your first migration
 ### 🎨 Customization Options
 
 - Choose your preferred auth integration
+- Opt for a database, or not
 - Select your desired Docker port
 - Opt for Tailwind CSS integration
   - Additional UI framework options:

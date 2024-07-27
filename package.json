@@ -4,6 +4,7 @@
     "url": "https://github.com/SamuelRCrider/chiks/issues"
   },
   "dependencies": {
+    "@forge-ml/client": "^0.1.10",
     "golang-npm": "^0.0.6"
   },
   "description": "An opensource (hopefully) application boilerplate script written in Golang.",
@@ -40,7 +41,7 @@
   "scripts": {
     "postinstall": "golang-npm install",
     "preuninstall": "golang-npm uninstall",
-    "test": "echo \"Error: no test specified\" \u0026\u0026 exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "0.5.2"
 }
