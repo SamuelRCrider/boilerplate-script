@@ -133,9 +133,12 @@ func Next_Firebase(project_name string, docker_port string) {
 		return
 	}
 
+	// make dockerfile
+	utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
+
 	utils.Work_wrapper(func() {
-		// make dockerfile
-		utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
+
+		fmt.Println("Composing Docker container...")
 
 		// get docker up
 		cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
@@ -143,7 +146,7 @@ func Next_Firebase(project_name string, docker_port string) {
 			fmt.Println(err)
 			return
 		}
-	}, "Starting Docker container...")()
+	}, "")()
 
 	utils.Work_wrapper(func() {
 		// initialize prisma
