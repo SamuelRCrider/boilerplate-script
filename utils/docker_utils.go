@@ -10,6 +10,7 @@ import (
 	generated "sam.crider/boilerplate-script/file_generator/generated_files"
 )
 
+// currently not used
 func Retry_Docker() string {
 
 	// get a random port between 1 and 65535
@@ -29,7 +30,7 @@ func Retry_Docker() string {
 	}
 
 	// make a new docker-compose.yml file
-	Revise_File("docker-compose.yml", generated.File__docker, random_port)
+	Revise_File("docker-compose.yml", generated.File__docker, []Params{{Name: "docker_port", Value: random_port}})
 
 	// get docker up
 	cmd_docker := BoundCommand("docker", "compose", "up", "-d")

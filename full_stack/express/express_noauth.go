@@ -9,7 +9,7 @@ import (
 	"sam.crider/boilerplate-script/utils"
 )
 
-func Express_NoAuth(docker_port string) {
+func Express_NoAuth(docker_port string, project_name string) {
 	// mkdir for backend, 0755 is the permission bits
 	utils.Mkdir_chdir("backend")
 
@@ -58,7 +58,7 @@ func Express_NoAuth(docker_port string) {
 	utils.Create_File("app.ts", generated.File__noAuthApp)
 
 	// make dockerfile
-	utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
+	utils.Revise_File("docker-compose.yml", generated.File__docker, []utils.Params{{Name: "docker_port", Value: docker_port}, {Name: "project_name", Value: project_name}})
 
 	fmt.Println("Composing Docker container...")
 	// get docker up
@@ -83,7 +83,7 @@ func Express_NoAuth(docker_port string) {
 			return
 		}
 
-		utils.Revise_File(".env", generated.File__firebaseEnv, docker_port)
+		utils.Revise_File(".env", generated.File__firebaseEnv, []utils.Params{{Name: "docker_port", Value: docker_port}})
 
 		// cd into prisma
 		err = os.Chdir("prisma")

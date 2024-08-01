@@ -58,7 +58,10 @@ func Express_ClerkAuth(project_name string, docker_port string) {
 	utils.Create_File("app.ts", generated.File__expressClerkApp)
 
 	// make dockerfile
-	utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port, project_name)
+	utils.Revise_File("docker-compose.yml", generated.File__docker, []utils.Params{
+		{Name: "docker_port", Value: docker_port},
+		{Name: "project_name", Value: project_name},
+	})
 
 	fmt.Println("Composing Docker container...")
 
@@ -84,7 +87,9 @@ func Express_ClerkAuth(project_name string, docker_port string) {
 			return
 		}
 
-		utils.Revise_File(".env", generated.File__expressClerkEnv, []string{docker_port, project_name})
+		utils.Revise_File(".env", generated.File__expressClerkEnv, []utils.Params{
+			{Name: "docker_port", Value: docker_port},
+		})
 
 		// cd into prisma
 		err = os.Chdir("prisma")
