@@ -57,17 +57,18 @@ func Express_NoAuth(docker_port string) {
 	// make app.ts
 	utils.Create_File("app.ts", generated.File__noAuthApp)
 
-	utils.Work_wrapper(func() {
-		// make dockerfile
-		utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
+	// make dockerfile
+	utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
 
+	utils.Work_wrapper(func() {
+		fmt.Println("Composing Docker container...")
 		// get docker up
 		cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
 		if err := cmd_docker.Run(); err != nil {
 			fmt.Println(err)
 			return
 		}
-	}, "Starting Docker container...")()
+	}, "")()
 
 	utils.Work_wrapper(func() {
 		// initialize primsa
