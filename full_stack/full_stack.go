@@ -48,7 +48,7 @@ func Full_Stack(stack string, project_name string, docker_port string, auth_inte
 			vite_scripts.Vite_FirebaseAuth()
 
 			// create the backend
-			express_scripts.Express_FirebaseAuth(docker_port)
+			express_scripts.Express_FirebaseAuth(docker_port, project_name)
 
 			fmt.Println("Success! Boilerplate created. Check the root directory README.md for further instructions.")
 			return
@@ -61,7 +61,7 @@ func Full_Stack(stack string, project_name string, docker_port string, auth_inte
 			vite_scripts.Vite_ClerkAuth()
 
 			// create the backend
-			express_scripts.Express_ClerkAuth(docker_port)
+			express_scripts.Express_ClerkAuth(project_name, docker_port)
 
 			fmt.Println("Success! Boilerplate created. Check the root directory README.md for further instructions.")
 			return
@@ -74,7 +74,7 @@ func Full_Stack(stack string, project_name string, docker_port string, auth_inte
 			vite_scripts.Vite_NoAuth()
 
 			// create the backend
-			express_scripts.Express_NoAuth(docker_port)
+			express_scripts.Express_NoAuth(docker_port, project_name)
 
 			fmt.Println("Success! Boilerplate created. Check the root directory README.md for further instructions.")
 			return

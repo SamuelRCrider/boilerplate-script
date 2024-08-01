@@ -42,21 +42,59 @@ func Create_File(name string, file_content []string) {
 	}
 }
 
-/* NOTE: this function is currently hardcoded to only replace the docker port number */
-func Revise_File(name string, file_content []string, new string) {
-	// create file
+/*
+* Revise File Params Struct
+*
+* name is the name of the variable to replace
+* value is the value to replace it with
+ */
+type Params struct {
+	Name  string
+	Value string
+}
+
+func Revise_File(name string, file_content []string, params []Params) {
+	// Create file
 	file, err := os.Create(name)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-
-	// makes sure the file closes when function finishes execution
+	// Makes sure the file closes when function finishes execution
 	defer CloseFile(file)
 
-	// loop through data and write lines, if line contains the word "10009", replace it with the user's input
-	for _, v := range file_content {
-		_, err := fmt.Fprintln(file, strings.Replace(v, "10009", new, -1))
+	// Create a copy of file_content to modify
+	modified_content := make([]string, len(file_content))
+	copy(modified_content, file_content)
+
+	// Loop through params
+	for _, param := range params {
+		switch param.Name {
+		case "docker_port":
+			for i, v := range modified_content {
+				// -1 replaces all instances
+				modified_content[i] = strings.Replace(v, "10009", param.Value, -1)
+			}
+		case "project_name":
+			for i, v := range modified_content {
+				// we only want to replace the first instance in the file, so we break the loop after the first replacement
+				newStr := strings.Replace(v, "postgres:", param.Value+":", -1)
+				if v != newStr {
+					modified_content[i] = newStr
+					break
+				}
+
+			}
+		/* add more cases here */
+		default:
+			fmt.Println("Error: invalid parameter")
+			return
+		}
+	}
+
+	// Write the modified content to the file
+	for _, line := range modified_content {
+		_, err := fmt.Fprintln(file, line)
 		if err != nil {
 			fmt.Println(err)
 			return

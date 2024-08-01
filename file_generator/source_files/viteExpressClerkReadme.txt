@@ -11,9 +11,6 @@
 
 ## Frontend
 #### Notes
-- I added a user with auth object to the request object in the backend by declaring it in the global.d.ts file. 
-    You may need to go into the ./utils/global.d.ts file and delete a line, then add it back in and save the file in order for 
-    the global type to be recognized.
 - If you want to use process.env.[secret], you will need to define it in the vite.config.ts file under where I've defined the API_URL.
 - IF USING SHADCN: to add a new component run `npx shadcn-ui@latest add <component_name>`
 
@@ -24,13 +21,19 @@
 
 #### Clerk
 - You need to go to the clerk website and create a new project.
-- Then add the project's publishable key and secret key to the .env file.
+- Then add the project's publishable key to the .env.local file.
 
 #### To connect to your backend:
 1. Add your backend's url to the frontend .env file
 2. Add this to your package.json: "proxy": "backend url",
 
 ## Backend
+#### Notes
+
+- I added a user with auth object to the request object in the backend by declaring it in the global.d.ts file.
+  You may need to go into the ./utils/global.d.ts file and delete a line, then add it back in and save the file in order for
+  the global type to be recognized.
+  
 #### To run backend: 
 1. Go to package.json
 2. Add this script: "start": "nodemon index.ts"

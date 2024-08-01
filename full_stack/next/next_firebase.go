@@ -134,19 +134,16 @@ func Next_Firebase(project_name string, docker_port string) {
 	}
 
 	// make dockerfile
-	utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
+	utils.Revise_File("docker-compose.yml", generated.File__docker, []utils.Params{{Name: "docker_port", Value: docker_port}, {Name: "project_name", Value: project_name}})
 
-	utils.Work_wrapper(func() {
+	fmt.Println("Composing Docker container...")
 
-		fmt.Println("Composing Docker container...")
-
-		// get docker up
-		cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
-		if err := cmd_docker.Run(); err != nil {
-			fmt.Println(err)
-			return
-		}
-	}, "")()
+	// get docker up
+	cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
+	if err := cmd_docker.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	utils.Work_wrapper(func() {
 		// initialize prisma
@@ -162,7 +159,7 @@ func Next_Firebase(project_name string, docker_port string) {
 			fmt.Println(err)
 			return
 		}
-		utils.Revise_File(".env", generated.File__nextFirebaseEnv, docker_port)
+		utils.Revise_File(".env", generated.File__nextFirebaseEnv, []utils.Params{{Name: "docker_port", Value: docker_port}})
 
 		// replace the gitignore file
 		err = os.Remove(".gitignore")

@@ -22,6 +22,12 @@
 2. Add this to your package.json: "proxy": "backend url",
 
 ## Backend
+#### Notes
+
+- I added a user with auth object to the request object in the backend by declaring it in the global.d.ts file.
+  You may need to go into the ./utils/global.d.ts file and delete a line, then add it back in and save the file in order for
+  the global type to be recognized.
+  
 #### To run backend: 
 1. Go to package.json
 2. Add this script: "start": "nodemon index.ts"
