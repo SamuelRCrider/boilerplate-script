@@ -141,15 +141,13 @@ func Next_ClerkAuth(project_name string, docker_port string) {
 	// make dockerfile
 	utils.Revise_File("docker-compose.yml", generated.File__docker, docker_port)
 
-	utils.Work_wrapper(func() {
-		fmt.Println("Composing Docker container...")
-		// get docker up
-		cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
-		if err := cmd_docker.Run(); err != nil {
-			fmt.Println(err)
-			return
-		}
-	}, "")()
+	fmt.Println("Composing Docker container...")
+	// get docker up
+	cmd_docker := utils.BoundCommand("docker", "compose", "up", "-d")
+	if err := cmd_docker.Run(); err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	utils.Work_wrapper(func() {
 		// initialize prisma
