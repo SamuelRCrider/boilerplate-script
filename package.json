@@ -41,7 +41,7 @@
   "scripts": {
     "postinstall": "golang-npm install",
     "preuninstall": "golang-npm uninstall",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" \u0026\u0026 exit 1"
   },
-  "version": "0.5.3"
+  "version": "0.5.4"
 }
