@@ -21,7 +21,7 @@
 
 #### Clerk
 - You need to go to the clerk website and create a new project.
-- Then add the project's publishable key and secret key to the .env file.
+- Then add the project's publishable key to the .env.local file.
 
 #### To connect to your backend:
 1. Add your backend's url to the frontend .env file
