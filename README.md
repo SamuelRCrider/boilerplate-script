@@ -47,7 +47,7 @@ Automatically spins up a Docker container
 
 ### 🗄 Database Setup
 
-Sets up a Prisma database and runs your first migration
+Sets up a PostgreSQL database (Prisma ORM) and runs your first migration
 
 ### 🎨 Customization Options
 
