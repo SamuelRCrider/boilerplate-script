@@ -27,16 +27,21 @@ func main() {
 	// parse args
 	args := os.Args[1:]
 
-	fmt.Println(args)
-
 	if len(args) > 0 {
-		if args[0] == "--help" {
+		switch args[0] {
+		case "--help":
 			utils.PrintHelp()
 			return
+		case "--version":
+			utils.PrintVersion()
+			return
+		case "-v":
+			utils.PrintVersion()
+			return
+		default:
+			fmt.Println("Currently, we only support --help, --version, and -v flags")
+			return
 		}
-		// for now, we only support the --help flag
-		fmt.Println("Currently, we only support the --help flag")
-		return
 	}
 
 	// get the user's selected stack
@@ -61,6 +66,23 @@ func main() {
 	if strings.Contains(stack, "Frontend") {
 		frontend_only_boil.FrontendOnly(stack, project_name)
 		return
+	}
+
+	docker_check := utils.Select("Docker must be installed and running if you plan on having a database.", []string{
+		"Docker is installed and running.",
+		"I need to install Docker.",
+		"Open Docker for me.",
+		"I don't plan on using a database.",
+	})
+	if strings.Contains(docker_check, "need") {
+		utils.Open("https://docs.docker.com/get-docker/")
+		return
+	} else if strings.Contains(docker_check, "Open") {
+		cmd := utils.BoundCommand("open", "-a", "Docker")
+		if err := cmd.Run(); err != nil {
+			fmt.Println("Docker failed to open, please open it manually and try again.")
+			return
+		}
 	}
 
 	// get users auth preference
