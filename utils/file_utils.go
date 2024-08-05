@@ -101,3 +101,20 @@ func Revise_File(name string, file_content []string, params []Params) {
 		}
 	}
 }
+
+func Revise_Text(text string, params []Params) string {
+	for _, param := range params {
+		switch param.Name {
+		case "user-v":
+			text = strings.Replace(text, "user-v", param.Value, -1)
+		case "latest-v":
+			text = strings.Replace(text, "latest-v", param.Value, -1)
+
+		/* add more cases here */
+		default:
+			fmt.Println("Error: invalid parameter")
+			os.Exit(1)
+		}
+	}
+	return text
+}
