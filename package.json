@@ -43,5 +43,5 @@
     "preuninstall": "golang-npm uninstall",
     "test": "echo \"Error: no test specified\" \u0026\u0026 exit 1"
   },
-  "version": "0.5.5"
+  "version": "0.5.6"
 }
